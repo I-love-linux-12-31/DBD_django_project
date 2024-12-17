@@ -237,9 +237,7 @@ def supplier_list(request):
 
 
 def index(request):
-    print("INDEX")
-    print(is_admin(request))
-    print(request.user)
+
     return render(
         request,
         'index.html',

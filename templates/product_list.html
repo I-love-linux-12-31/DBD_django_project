@@ -31,7 +31,9 @@
             <div class="card" style="width: 40rem;">
               <div class="card-body">
                 {% if product.image %}
-                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" height="256px" width="256px">
+                {% else %}
+                    <img src="/product_images/noimage_10iswSl.webp" class="card-img-top" alt="{{ product.name }}" height="256px" width="256px">
                 {% endif %}
                 <h5 class="card-title">{{ product.title }} - {{ product.price }}₽</h5>
                 <h6 class="card-subtitle mb-2 text-muted">
@@ -40,12 +42,12 @@
                     </small>
                 </h6>
                 <p class="card-text">{{ post.text|truncatewords:10 }}</p>
-              
+
                 {% if admin %}
                     <!--<a href="" class="btn-info">Изменить</a>  button_class="btn-success" -->
                     {% url 'projectForDBD:product_edit' product.id as edit_url %}
                     {% bootstrap_button button_type="link" content="Изменить" href=edit_url %}
-                    
+
                     {% url 'projectForDBD:product_delete' product.id as delete_url %}
                     {% bootstrap_button button_type="link" content="Удалить" href=delete_url button_class="btn-danger" %}
                 {% else %}
