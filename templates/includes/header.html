@@ -47,12 +47,21 @@
               Поставщики
             </a>
           </li>
-                  <li class="nav-item">
+          <li class="nav-item">
             <a
               class="nav-link {% if view_name == 'projectForDBD:category_list' %} active {% endif %}"
               href="{% url 'projectForDBD:category_list' %}"
             >
               Категории
+            </a>
+          </li>
+        
+          <li class="nav-item">
+            <a
+              class="nav-link {% if view_name == 'projectForDBD:cart' %} active {% endif %}"
+              href="{% url 'projectForDBD:cart' %}"
+            >
+              Корзина
             </a>
           </li>
 

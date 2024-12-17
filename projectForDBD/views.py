@@ -1,5 +1,7 @@
+from dataclasses import fields
+
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 from django.core.paginator import Paginator
 
 from django.db.utils import OperationalError
@@ -7,6 +9,8 @@ from django.db.utils import OperationalError
 from .forms import CategoryForm, SupplierForm, ProductForm
 from .models import Category, Supplier, Product
 from .filters import ProductFilter, CategoryFilter, SupplierFilter
+
+carts = dict()
 
 # Create your views here.
 def is_admin(request) -> bool:
@@ -193,7 +197,8 @@ def product_list(request):
             'filter': product_filter,
             "own_url": get_url_for_pagination(request),
             "user": request.user if request.user.is_authenticated else None,
-            "admin": is_admin(request)
+            "admin": is_admin(request),
+            "cart": (carts.get(request.user.id, []) if request.user.is_authenticated else [])
         }
     )
 
@@ -247,3 +252,50 @@ def index(request):
         }
     )
 
+
+def add_to_cart(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    product = get_object_or_404(Product, pk=pk)
+    user_id = request.user.id
+    if user_id not in carts:
+        carts[user_id] = []
+    carts[user_id].append(pk)
+    return HttpResponse(status=200)
+
+
+def remove_from_cart(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    product = get_object_or_404(Product, pk=pk)
+    user_id = request.user.id
+    if user_id not in carts:
+        carts[user_id] = []
+        print("NO CART")
+        return HttpResponse(status=200)
+    if product.id in carts[user_id]:
+        carts[user_id].remove(product.id)
+    return HttpResponse(status=200)
+
+def show_cart(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    user_id = request.user.id
+    cart = carts.get(request.user.id, []) if request.user.is_authenticated else []
+    print("CART", cart)  # [1, 2]
+    product_filter = ProductFilter(request.GET, queryset=Product.objects.filter(id__in=cart).only('id', 'title', 'description', 'price', 'image'))
+    paginator = Paginator(product_filter.qs, 10)  # Показываем по 10 товаров на странице
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(
+        request,
+        'cart.html',
+        {
+            'page_obj': page_obj,
+            'filter': product_filter,
+            "own_url": get_url_for_pagination(request),
+            "user": request.user if request.user.is_authenticated else None,
+            "admin": is_admin(request)
+        }
+    )

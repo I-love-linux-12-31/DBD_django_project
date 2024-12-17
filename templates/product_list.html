@@ -54,6 +54,12 @@
                     <a href="{% url 'projectForDBD:product_edit' product.id %}" class="card-link">Подробнее</a>
                 {% endif %}
 
+                {% if product.id not in cart %}
+                    <button class="add-to-cart btn-success btn" data-product-id="{{ product.id }}">В корзину</button>
+                {% else %}
+                    <button class="btn-secondary btn disabled" data-product-id="{{ product.id }}">Уже в корзине</button>
+                {% endif %}
+
               </div>
             </div>
         </div>
@@ -61,6 +67,30 @@
     {% endfor %}
     </article>
 
-
+    <script>
+$(document).ready(function() {
+    $('.add-to-cart').click(function(e) {
+        e.preventDefault();
+        var $button = $(this);  // Сохраняем ссылку на кнопку
+        var productId = $button.data('product-id');
+        $.ajax({
+            url: '/add_to_cart/' + productId + '/',
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(response) {
+                //alert('Товар добавлен в корзину');
+                $button.addClass('disabled btn-secondary').removeClass('btn-success');
+                $button.prop('disabled', true);
+                $button.text('Добавлено');
+            },
+            error: function(xhr, errmsg, err) {
+                alert('Ошибка при добавлении товара в корзину');
+            }
+        });
+    });
+});
+    </script>
 
 {% endblock %}
