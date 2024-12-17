@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}
+  Категории
+{% endblock %}
+
+{% block content %}
+  
+    <div style="display: flex; align-items: center; justify-content: space-around;">
+        <div class="card col-8 row-12">
+
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% bootstrap_button button_type="submit" content="Войти" %}
+                    {% bootstrap_button button_type="link" content="Востановить пароль" href="/password_reset/" button_class="btn-warning" %}
+                </form>
+                
+                
+                <p>
+                    <a href="/password_reset"></a>
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

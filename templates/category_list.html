@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}
+  Категории
+{% endblock %}
+
+{% block content %}
+    
+    <div style="display: flex; align-items: center; justify-content: space-around;">
+        <div class="card col-8 row-12">
+
+            <div class="card-body">
+                <form method="get">
+                    {% bootstrap_form filter.form %}
+                    {% bootstrap_button button_type="submit" content="Фильтровать" %}
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+    <br>
+    
+    <article class="mb-5">
+    {% for category in page_obj %}
+        <div style="display: flex; align-items: center; justify-content: space-around; margin-bottom: 4px; margin-top: 4px;">
+            <div class="card" style="width: 40rem;">
+              <div class="card-body">
+                <h5 class="card-title">{{ category.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    <small>
+                        {{ category.description }}
+                    </small>
+                </h6>
+                <p class="card-text">{{ post.text|truncatewords:10 }}</p>
+                <a href="{% url 'projectForDBD:category_edit' category.id %}" class="card-link">Подробнее</a>
+              </div>
+            </div>
+        </div>
+
+    {% endfor %}
+    </article>
+    
+
+
+{% endblock %}

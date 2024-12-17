@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}
+  Каталог товаров
+{% endblock %}
+
+{% block content %}
+    <div style="display: flex; align-items: center; justify-content: space-around;">
+        <div class="card col-8 row-12">
+
+            <div class="card-body">
+                <form method="get">
+                    {% bootstrap_form filter.form %}
+                    {% bootstrap_button button_type="submit" content="Фильтровать" %}
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+    <br>
+
+    <article class="mb-5">
+    {% for product in page_obj %}
+        <div style="display: flex; align-items: center; justify-content: space-around; margin-bottom: 4px; margin-top: 4px;">
+            <div class="card" style="width: 40rem;">
+              <div class="card-body">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                {% endif %}
+                <h5 class="card-title">{{ product.title }} - {{ product.price }}₽</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                   <small>
+                        {{ product.description }}
+                    </small>
+                </h6>
+                <p class="card-text">{{ post.text|truncatewords:10 }}</p>
+                <a href="{% url 'projectForDBD:product_edit' product.id %}" class="card-link">Подробнее</a>
+              </div>
+            </div>
+        </div>
+
+    {% endfor %}
+    </article>
+
+
+
+{% endblock %}

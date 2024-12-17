@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}
+  Поставщики
+{% endblock %}
+
+{% block content %}
+    <div style="display: flex; align-items: center; justify-content: space-around;">
+        <div class="card col-8 row-12">
+
+            <div class="card-body">
+                <form method="get">
+                    {% bootstrap_form filter.form %}
+                    {% bootstrap_button button_type="submit" content="Фильтровать" %}
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+    <br>
+
+    
+    <article class="mb-5">
+    {% for supplier in page_obj %}
+        <div style="display: flex; align-items: center; justify-content: space-around; margin-bottom: 4px; margin-top: 4px;">
+            <div class="card" style="width: 40rem;">
+              <div class="card-body">
+                <h5 class="card-title">{{ supplier.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                   <small>
+                        {{ supplier.contact_info }}
+                    </small>
+                </h6>
+                <p class="card-text">{{ post.text|truncatewords:10 }}</p>
+                <a href="{% url 'projectForDBD:supplier_edit' supplier.id %}" class="card-link">Подробнее</a>
+              </div>
+            </div>
+        </div>
+
+    {% endfor %}
+    </article>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Контакты</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for supplier in page_obj %}
+                <tr>
+                    <td>{{ supplier.name }}</td>
+                    <td>{{ supplier.contact_info }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

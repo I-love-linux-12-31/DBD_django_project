@@ -1,0 +1,98 @@
+{% load static %}
+{% load django_bootstrap5 %}
+
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'projectForDBD:index' %}">
+        <img src="{% static 'img/logo.png' %}" height="50" class="d-inline-block align-top" alt="">
+      </a>
+
+      <div 
+        class="navbar-toggler" 
+        type="button" 
+        data-toggle="collapse" 
+        data-target="#navbarNav" 
+        aria-controls="navbarNav" 
+        aria-expanded="false" 
+        aria-label="Toggle navigation"
+        >
+        <span class="navbar-toggler-icon"></span>
+      </div>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        {% with request.resolver_match.view_name as view_name %}            
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a
+              class="nav-link {% if view_name == 'projectForDBD:index' %} active {% endif %}"
+              href="{% url 'projectForDBD:index' %}"
+              >
+              Главная
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if view_name == 'projectForDBD:product_list' %} active {% endif %}"
+              href="{% url 'projectForDBD:product_list' %}"
+              >
+              Каталог товаров
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if view_name == 'projectForDBD:supplier_list' %} active {% endif %}"
+              href="{% url 'projectForDBD:supplier_list' %}"
+            >
+              Поставщики
+            </a>
+          </li>
+                  <li class="nav-item">
+            <a
+              class="nav-link {% if view_name == 'projectForDBD:category_list' %} active {% endif %}"
+              href="{% url 'projectForDBD:category_list' %}"
+            >
+              Категории
+            </a>
+          </li>
+
+
+
+          {% if admin %}
+            <li class="nav-item">
+            <a
+              class="nav-link"
+              href="/admin/"
+              style="background-color: orangered; color: black;"
+            >
+              Админ-панель
+            </a>
+            </li>
+          {% endif %}
+
+        </ul>
+        {% endwith %}
+      </div>
+
+      <div>
+      <div style="border: 2px solid darkgray; border-radius: 10px; padding: 4px;">
+      <div class="card-body">
+          {% if user and user.email %}
+
+              <p class="nav-item" style="display: inline;" >{{ user.first_name }} {{ user.last_name }}</p>
+              <pre class="nav-item" style="display: inline; width: 8px"> </pre>
+              <form class="nav-item"  style="display: inline; width: 8px" method="post" action="/logout/">
+                  {% csrf_token %}
+                  {% bootstrap_button button_type="submit" content="Выйти" button_class="btn-warning" %}
+              </form>
+          {% else %}
+              <p class="nav-item" style="display: inline;" > Не авторизован</p>
+              {% bootstrap_button button_type="link" content="Войти" href="/login/" button_class="btn-success" %}
+          {% endif %}
+      </div>
+      </div>
+
+      </div>
+    </div>
+  </nav>
+</header>
