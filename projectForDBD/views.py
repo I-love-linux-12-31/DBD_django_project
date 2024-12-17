@@ -25,7 +25,7 @@ def category_create(request):
         form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('category_list')
+            return redirect('projectForDBD:category_list')
     else:
         form = CategoryForm()
 
@@ -44,7 +44,7 @@ def category_edit(request, pk):
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
-            return redirect('category_list')
+            return redirect('projectForDBD:category_list')
     else:
         form = CategoryForm(instance=category)
 
@@ -57,7 +57,7 @@ def category_delete(request, pk):
         return HttpResponseForbidden("У вас нет прав для удаления категории.")
 
     category.delete()
-    return redirect('category_list')
+    return redirect('projectForDBD:category_list')
 
 # Представление для создания поставщика
 def supplier_create(request):
@@ -68,7 +68,7 @@ def supplier_create(request):
         form = SupplierForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('supplier_list')
+            return redirect('projectForDBD:supplier_list')
     else:
         form = SupplierForm()
 
@@ -88,7 +88,7 @@ def supplier_edit(request, pk):
         form = SupplierForm(request.POST, request.FILES, instance=supplier)
         if form.is_valid():
             form.save()
-            return redirect('supplier_list')
+            return redirect('projectForDBD:supplier_list')
     else:
         form = SupplierForm(instance=supplier)
 
@@ -101,7 +101,7 @@ def supplier_delete(request, pk):
         return HttpResponseForbidden("У вас нет прав для удаления поставщика.")
 
     supplier.delete()
-    return redirect('supplier_list')
+    return redirect('projectForDBD:supplier_list')
 
 # Представление для создания товара
 def product_create(request):
@@ -112,7 +112,7 @@ def product_create(request):
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('product_list')
+            return redirect('projectForDBD:product_list')
     else:
         form = ProductForm()
 
@@ -148,7 +148,7 @@ def product_delete(request, pk):
         return HttpResponseForbidden("У вас нет прав для удаления товара.")
 
     product.delete()
-    return redirect('product_list')
+    return redirect('projectForDBD:product_list')
 
 
 def get_url_for_pagination(request):

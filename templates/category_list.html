@@ -14,6 +14,11 @@
                 <form method="get">
                     {% bootstrap_form filter.form %}
                     {% bootstrap_button button_type="submit" content="Фильтровать" %}
+                    
+                    {% if admin %}
+                        {% url 'projectForDBD:category_create' as add_url %}
+                        {% bootstrap_button button_type="link" content="Добавить новую запись" href=add_url button_class="btn-success" %}
+                    {% endif %}
                 </form>
             </div>
 
@@ -33,8 +38,18 @@
                         {{ category.description }}
                     </small>
                 </h6>
-                <p class="card-text">{{ post.text|truncatewords:10 }}</p>
-                <a href="{% url 'projectForDBD:category_edit' category.id %}" class="card-link">Подробнее</a>
+                  
+                {% if admin %}
+                    <!--<a href="" class="btn-info">Изменить</a>  button_class="btn-success" -->
+                    {% url 'projectForDBD:category_edit' category.id as edit_url %}
+                    {% bootstrap_button button_type="link" content="Изменить" href=edit_url %}
+                    
+                    {% url 'projectForDBD:category_delete' category.id as delete_url %}
+                    {% bootstrap_button button_type="link" content="Удалить" href=delete_url button_class="btn-danger" %}
+                {% else %}
+                    <a href="{% url 'projectForDBD:category_edit' category.id %}" class="card-link">Подробнее</a>
+                {% endif %}
+
               </div>
             </div>
         </div>
