@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseForbidden
 from django.core.paginator import Paginator
 
+from django.db.utils import OperationalError
+
 from .forms import CategoryForm, SupplierForm, ProductForm
 from .models import Category, Supplier, Product
 from .filters import ProductFilter, CategoryFilter, SupplierFilter
@@ -108,15 +110,31 @@ def product_create(request):
     if not is_admin(request):
         return HttpResponseForbidden("У вас нет прав для создания товара.")
 
+    error_msg = ""
+
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('projectForDBD:product_list')
+            try:
+                form.save()
+            except OperationalError as e:
+                render(request, 'main_form.html', {'form': form})
+                error_msg = str(e)
+            else:
+                return redirect('projectForDBD:product_list')
     else:
         form = ProductForm()
 
-    return render(request, 'main_form.html', {'form': form})
+    return render(
+        request,
+        'main_form.html',
+        {
+            'form': form,
+            "error": error_msg,
+            "user": request.user if request.user.is_authenticated else None,
+            "admin": is_admin(request)
+        }
+    )
 
 # Представление для редактирования товара
 def product_edit(request, pk):

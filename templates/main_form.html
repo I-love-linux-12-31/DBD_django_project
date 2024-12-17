@@ -18,6 +18,13 @@
                     {% bootstrap_form form %}
                     {% bootstrap_button button_type="submit" content="Применить" %}
                 </form>
+                
+                {% if error %}
+                    <br>
+                    <div class="alert alert-danger" role="alert">
+                        <h4>{{ error }}</h4>
+                    </div>
+                {% endif %}
             </div>
 
         </div>
