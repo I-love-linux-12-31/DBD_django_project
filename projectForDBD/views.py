@@ -246,7 +246,7 @@ def supplier_list(request):
 def index(request):
     with connection.cursor() as cursor:
         cursor.execute("SELECT count_products()")  # Замените на вашу SQL-функцию
-        result = cursor.fetchone()
+        result = cursor.fetchone()[0]
 
     return render(
         request,
