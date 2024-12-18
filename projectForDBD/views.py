@@ -4,6 +4,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseForbidden, HttpResponse
 from django.core.paginator import Paginator
 
+from django.db import connection
+
 from django.db.utils import OperationalError
 
 from .forms import CategoryForm, SupplierForm, ProductForm
@@ -242,13 +244,17 @@ def supplier_list(request):
 
 
 def index(request):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT count_products()")  # Замените на вашу SQL-функцию
+        result = cursor.fetchone()
 
     return render(
         request,
         'index.html',
         {
             "user": request.user if request.user.is_authenticated else None,
-            "admin": is_admin(request)
+            "admin": is_admin(request),
+            "products_count": result,
         }
     )
 
