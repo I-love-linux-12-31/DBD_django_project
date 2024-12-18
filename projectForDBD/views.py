@@ -244,9 +244,12 @@ def supplier_list(request):
 
 
 def index(request):
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT count_products()")  # Замените на вашу SQL-функцию
-        result = cursor.fetchone()[0]
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT count_products()")  # Замените на вашу SQL-функцию
+            result = cursor.fetchone()[0]
+    except Exception as e:
+        result = "No imported functions!"
 
     return render(
         request,
