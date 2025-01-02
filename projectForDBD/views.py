@@ -187,7 +187,7 @@ def get_url_for_pagination(request):
 
 def product_list(request):
     product_filter = ProductFilter(request.GET, queryset=Product.objects.all())
-    paginator = Paginator(product_filter.qs, 7)  # Показываем по 10 товаров на странице
+    paginator = Paginator(product_filter.qs, 7)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
